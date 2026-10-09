@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "URL Security Analyzer",
+  title: "Sentinel — URL Security Analyzer",
   description:
-    "Cek keamanan URL dengan AI - deteksi phishing realtime dengan Gemini",
+    "Analisis keamanan URL realtime dengan AI. Deteksi phishing, malware, dan ancaman lainnya.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased noise">{children}</body>
     </html>
   );
 }
