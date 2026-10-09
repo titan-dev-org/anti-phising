@@ -17,6 +17,23 @@ export interface AnalysisSignals {
   finalUrl: string;
 }
 
+export interface IpInfo {
+  ip: string;
+  city: string | null;
+  region: string | null;
+  country: string | null;
+  isp: string | null;
+  org: string | null;
+  asn: string | null;
+  timezone: string | null;
+}
+
+export interface SubdomainInfo {
+  subdomain: string;
+  ip: string | null;
+  country: string | null;
+}
+
 export type Verdict = "SAFE" | "SUSPICIOUS" | "PHISHING";
 
 export interface AnalysisResult {
@@ -27,8 +44,10 @@ export interface AnalysisResult {
   aiAnalysis: string;
   recommendation: string;
   timestamp: string;
+  ipInfo: IpInfo | null;           // ← TAMBAH
+  subdomains: SubdomainInfo[];     // ← TAMBAH
 }
 
 export interface ApiError {
   error: string;
-  }
+}
