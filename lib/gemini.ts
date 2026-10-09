@@ -18,16 +18,11 @@ export async function analyzeWithGemini(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  
-  // PERUBAHAN UTAMA: Gunakan model gemini-3.8-flash
+
   const model = genAI.getGenerativeModel({
     model: "gemini-3.8-flash",
     generationConfig: {
-      // HAPUS temperature, top_p, top_k (tidak didukung di 3.8 Flash)
       responseMimeType: "application/json",
-      // Gunakan thinking_level, bukan thinking_budget
-      // Pilihan: "low", "medium", "high" (minimal tidak didukung)
-      thinking_level: "medium", 
     },
   });
 
@@ -101,4 +96,4 @@ WAJIB balas HANYA JSON valid tanpa markdown, format:
       recommendation: "Hati-hati dan jangan masukkan data pribadi.",
     };
   }
-                          }
+}
