@@ -1,28 +1,29 @@
 import { AnalysisResult } from "@/types";
 import SignalList from "./SignalList";
+import IpInfoCard from "./IpInfoCard";
+import SubdomainList from "./SubdomainList";
 
 const VERDICT_CONFIG = {
-  SAFE: {
-    label: "SAFE",
-    sublabel: "No threats detected",
-    icon: "✓",
-  },
-  SUSPICIOUS: {
-    label: "SUSPICIOUS",
-    sublabel: "Proceed with caution",
-    icon: "!",
-  },
-  PHISHING: {
-    label: "PHISHING",
-    sublabel: "Do not enter any data",
-    icon: "✕",
-  },
+  SAFE: { label: "SAFE", sublabel: "No threats detected", icon: "✓" },
+  SUSPICIOUS: { label: "SUSPICIOUS", sublabel: "Proceed with caution", icon: "!" },
+  PHISHING: { label: "PHISHING", sublabel: "Do not enter any data", icon: "✕" },
 } as const;
 
 export default function ResultCard({ result }: { result: AnalysisResult }) {
   const config = VERDICT_CONFIG[result.verdict];
   const isDanger = result.verdict === "PHISHING";
   const isWarn = result.verdict === "SUSPICIOUS";
+
+  // Ambil root domain buat subdomain listing
+  const rootDomain = (() => {
+    try {
+      const h = new URL(result.url).hostname;
+      const parts = h.split(".");
+      return parts.length > 2 ? parts.slice(-2).join(".") : h;
+    } catch {
+      return result.url;
+    }
+  })();
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -73,7 +74,6 @@ export default function ResultCard({ result }: { result: AnalysisResult }) {
               </div>
             </div>
 
-            {/* Risk score */}
             <div className="text-right shrink-0">
               <div
                 className={`text-6xl font-bold tracking-tighter leading-none ${
@@ -92,7 +92,6 @@ export default function ResultCard({ result }: { result: AnalysisResult }) {
             </div>
           </div>
 
-          {/* Progress bar */}
           <div
             className={`mt-6 h-1 rounded-full overflow-hidden ${
               isDanger ? "bg-neutral-300" : "bg-neutral-900"
@@ -130,6 +129,17 @@ export default function ResultCard({ result }: { result: AnalysisResult }) {
         </div>
       </div>
 
+      {/* IP Info */}
+      {result.ipInfo && <IpInfoCard ipInfo={result.ipInfo} />}
+
+      {/* Subdomains */}
+      {result.subdomains && result.subdomains.length > 0 && (
+        <SubdomainList
+          subdomains={result.subdomains}
+          domain={rootDomain}
+        />
+      )}
+
       {/* Signals */}
       <div className="p-8 rounded-2xl border border-neutral-800 bg-neutral-950">
         <div className="flex items-center gap-2 mb-6">
@@ -142,4 +152,4 @@ export default function ResultCard({ result }: { result: AnalysisResult }) {
       </div>
     </div>
   );
-                    }
+                }
